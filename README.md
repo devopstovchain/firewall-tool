@@ -34,3 +34,28 @@ To                         Action      From
 --                         ------      ----
 22/tcp                     ALLOW IN    Anywhere                   # SSH Port
 ```
+(Nếu sử dụng cổng SSH tùy chỉnh, ví dụ 2289, hãy chạy: make setup SSH_PORT=2289)
+
+### Bước 2: Mở cổng dịch vụ khi Dev hoặc Deploy
+Khi bạn chạy một dịch vụ mới (ví dụ cổng 3000), sử dụng lệnh:
+```bash
+make open 3000
+```
+Kịch bản 1: Mở công khai cho tất cả mọi người (All)
+```bash
+Bạn muốn mở port 3000 cho đối tượng nào?
+1) Tất cả mọi người (All / Anywhere)
+2) Chỉ một IP cụ thể
+Lựa chọn của bạn (1 hoặc 2): 1
+=== Đã MỞ port 3000 cho TẤT CẢ mọi người ===
+```
+Kịch bản 2: Chỉ mở cho 1 IP tin cậy (Ví dụ: IP của Server Nginx Gateway)
+```
+Bạn muốn mở port 3000 cho đối tượng nào?
+1) Tất cả mọi người (All / Anywhere)
+2) Chỉ một IP cụ thể
+Lựa chọn của bạn (1 hoặc 2): 2
+Nhập địa chỉ IP được phép truy cập: 1.2.3.4
+Nhập ghi chú (Ví dụ: Nginx_Server): Nginx_Gateway
+=== Đã MỞ port 3000 chỉ cho duy nhất IP: 1.2.3.4 ===
+```
