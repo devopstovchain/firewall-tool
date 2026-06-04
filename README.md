@@ -59,3 +59,51 @@ Nhập địa chỉ IP được phép truy cập: 1.2.3.4
 Nhập ghi chú (Ví dụ: Nginx_Server): Nginx_Gateway
 === Đã MỞ port 3000 chỉ cho duy nhất IP: 1.2.3.4 ===
 ```
+### Bước 3: Kiểm tra cấu hình và rà soát IP (make show)
+Kiểm tra toàn bộ IP được cấp phép riêng:
+```bash
+make show
+```
+Kết quả mẫu:
+```bash
+=== DANH SÁCH CÁC IP ĐƯỢC CẤP PHÉP TRUY CẬP ===
+[ 2] 22/tcp                     ALLOW       116.100.20.30              # IP_Nha_Rieng
+[ 5] 3000/tcp                   ALLOW       1.2.3.4                    # Nginx_Gateway
+```
+Kiểm tra cấu hình chi tiết của riêng cổng 3000:
+```bash
+make show 3000
+```
+Kết quả mẫu:
+```bash
+=== CẤU HÌNH CHI TIẾT CHO PORT: 3000 ===
+[ 4] 3000/tcp                   ALLOW       Anywhere                   # Mở All cho Dev
+[ 5] 3000/tcp                   ALLOW       1.2.3.4                    # Nginx_Gateway
+```
+### Bước 4: Đóng cổng dịch vụ (make close)
+Khi không cần sử dụng hoặc muốn thu hồi quyền truy cập của cổng 3000:
+```bash
+make close 3000
+```
+Kết quả mẫu:
+```bash
+=== Đang quét các luật tường lửa cho port 3000 ===
+Tìm thấy các luật sau đang áp dụng cho port 3000:
+--------------------------------------------------
+1) [ 4] 3000/tcp                   ALLOW       Anywhere                   # Mở All cho Dev
+2) [ 5] 3000/tcp                   ALLOW       1.2.3.4                    # Nginx_Gateway
+all) Xóa TẤT CẢ các luật trên
+--------------------------------------------------
+Nhập lựa chọn của bạn (Ví dụ: 'all' hoặc '1' hoặc chọn nhiều '1 3'): 1
+
+=== Đang xóa các luật được chọn ===
+=== Đã xóa thành công các luật được chọn ===
+```
+## 3. Lưu ý quan trọng về Docker
+Nếu chạy dịch vụ bằng Docker thông qua tùy chọn public port (ví dụ: -p 3000:3000), Docker sẽ tự động bypass (vượt qua) tường lửa UFW để mở ra Internet.
+
+Giải pháp: Luôn bind port vào địa chỉ nội bộ khi chạy Docker:
+```bash
+docker run -p 127.0.0.1:3000:3000 my-backend-service
+```
+Sau đó sử dụng lệnh ``make open 3000`` của bộ công cụ này để kiểm soát luồng traffic một cách an toàn.
