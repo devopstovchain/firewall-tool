@@ -22,3 +22,15 @@ Tệp `Makefile` này giúp tự động hóa việc cấu hình tường lửa 
 
 ```bash
 make setup
+```
+Kết quả mẫu:
+```bash
+=== Đang thiết lập cấu hình tường lửa an toàn ===
+=== Đã bật UFW: Đóng toàn bộ port, chỉ mở SSH (22) ===
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW IN    Anywhere                   # SSH Port
+```
